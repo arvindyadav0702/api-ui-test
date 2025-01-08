@@ -3,6 +3,7 @@ package steps.api;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
+import org.junit.Assert;
 import pages.api.CoinDeskPage;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -21,6 +22,12 @@ public class APISteps {
 
     @Then("the response should contain USD, GBP, and EUR")
     public void theResponseShouldContainUSDGBPAndEUR() {
+        String bpiData = response.jsonPath().getString("bpi");
+        if (bpiData.contains("EUR") && bpiData.contains("USD") && bpiData.contains("GBP")) {
+            Assert.assertTrue( true);
+        } else {
+            Assert.fail();
+        }
         assertThat(response.jsonPath().getString("bpi.USD"), notNullValue());
         assertThat(response.jsonPath().getString("bpi.GBP"), notNullValue());
         assertThat(response.jsonPath().getString("bpi.EUR"), notNullValue());
